@@ -2,19 +2,20 @@ FROM php:5.5-apache
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-
 RUN apt-get update && apt-get install -y \
     openssh-server \
-	  supervisor \
-	  git-core \
+    supervisor \
+    git-core \
     libmcrypt-dev \
     zlib1g-dev \
-    nodejs \
   && docker-php-ext-install -j$(nproc) mcrypt \
   && docker-php-ext-install -j$(nproc) zip \
   && docker-php-ext-install -j$(nproc) mbstring \
   && rm -rf /var/lib/apt/lists/*
+
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+
+RUN apt-get update && apt-get install -y nodejs
 
 RUN curl -sSL https://getcomposer.org/installer | php \
   && mv composer.phar /usr/local/bin/composer
